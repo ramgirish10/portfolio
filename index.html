@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Girish Bodempudi — Data & Product</title>
-    <link rel="icon" type="image/png" href="images/plogo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
@@ -34,117 +33,6 @@
         --mono: "DM Mono", monospace;
         --display: "Syne", sans-serif;
         --body: "DM Sans", sans-serif;
-      }
-
-      /* ── AURORA THEME ── */
-      body.aurora {
-        --bg: #0d0d12;
-        --bg2: #12121a;
-        --bg3: #1a1a26;
-        --surface: #1e1e2e;
-        --border: rgba(255, 255, 255, 0.07);
-        --border2: rgba(255, 255, 255, 0.14);
-        --ink: #e8e6ff;
-        --ink-mid: #a09cc0;
-        --ink-muted: #6b6890;
-        --ink-dim: #3d3a5c;
-      }
-      body.aurora #hero {
-        background: #0d0d12;
-      }
-      body.aurora nav.scrolled {
-        background: rgba(13, 13, 18, 0.92);
-      }
-      body.aurora .about-img-frame {
-        background: #1e1e2e;
-      }
-      body.aurora .project-card {
-        background: var(--bg);
-      }
-      body.aurora .project-card:hover {
-        background: var(--bg2);
-      }
-      body.aurora .contact-link {
-        background: var(--bg2);
-      }
-      body.aurora .contact-link:hover {
-        background: var(--surface);
-      }
-      body.aurora .mobile-menu {
-        background: var(--bg);
-      }
-      body.aurora .btn-primary {
-        background: var(--ink);
-        color: #0d0d12;
-      }
-      body.aurora .btn-ghost {
-        border-color: var(--border2);
-        color: var(--ink-mid);
-      }
-
-      /* Aurora canvas behind hero */
-      canvas#aurora {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        opacity: 0;
-        transition: opacity 0.8s ease;
-        pointer-events: none;
-      }
-      body.aurora canvas#aurora {
-        opacity: 1;
-      }
-      body.aurora canvas#chrome {
-        opacity: 0;
-      }
-      canvas#chrome {
-        transition: opacity 0.8s ease;
-      }
-
-      /* ── THEME TOGGLE BUTTON ── */
-      .theme-toggle {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        padding: 8px 16px;
-        background: var(--ink);
-        color: var(--bg);
-        border: none;
-        border-radius: 999px;
-        font-family: var(--mono);
-        font-size: 11px;
-        letter-spacing: 0.12em;
-        cursor: pointer;
-        transition: all 0.3s;
-        white-space: nowrap;
-        z-index: 1002;
-      }
-      .theme-toggle:hover {
-        opacity: 0.85;
-        transform: translateY(-1px);
-      }
-      .theme-toggle svg {
-        width: 13px;
-        height: 13px;
-        stroke: currentColor;
-        fill: none;
-        stroke-width: 1.5;
-        flex-shrink: 0;
-      }
-      /* Desktop toggle sits in nav — hidden on mobile */
-      .theme-toggle-desktop {
-        display: inline-flex;
-      }
-      /* Mobile toggle fixed bottom-right — hidden on desktop */
-      .theme-toggle-mobile {
-        display: none;
-        position: fixed;
-        bottom: 24px;
-        right: 20px;
-        z-index: 1002;
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
       }
 
       /* ── SCROLL SNAP CONTAINER ── */
@@ -1059,340 +947,6 @@
         color: var(--ink);
       }
 
-      /* ─── HAMBURGER + MOBILE MENU (hidden on desktop) ─── */
-      .hamburger {
-        display: none;
-      }
-      .mobile-menu {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: var(--bg);
-        z-index: 999;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 36px;
-      }
-      .mobile-menu.open {
-        display: flex;
-      }
-      .mobile-menu a {
-        font-family: var(--mono);
-        font-size: 14px;
-        color: var(--ink-muted);
-        text-decoration: none;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-      }
-
-      /* ═══════════════════════════════
-         MOBILE  max-width: 768px
-      ═══════════════════════════════ */
-      @media (max-width: 768px) {
-        /* kill cursor */
-        .cursor,
-        .cursor-ring {
-          display: none;
-        }
-        html {
-          cursor: auto;
-        }
-        .dot-nav {
-          display: none;
-        }
-
-        /* desktop toggle hidden, mobile toggle shown */
-        .theme-toggle-desktop {
-          display: none;
-        }
-        .theme-toggle-mobile {
-          display: inline-flex;
-        }
-
-        /* only non-hero sections scroll internally */
-        #about,
-        #projects,
-        #timeline,
-        #skills,
-        #contact {
-          overflow-y: auto;
-          -webkit-overflow-scrolling: touch;
-        }
-
-        /* NAV */
-        nav {
-          padding: 14px 20px;
-        }
-        .nav-links {
-          display: none;
-        }
-        .hamburger {
-          display: flex;
-          flex-direction: column;
-          gap: 5px;
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 6px;
-          z-index: 1001;
-        }
-        .hamburger span {
-          display: block;
-          width: 22px;
-          height: 1.5px;
-          background: var(--ink);
-          transition: all 0.28s;
-          transform-origin: center;
-        }
-        .hamburger.open span:nth-child(1) {
-          transform: translateY(6.5px) rotate(45deg);
-        }
-        .hamburger.open span:nth-child(2) {
-          opacity: 0;
-        }
-        .hamburger.open span:nth-child(3) {
-          transform: translateY(-6.5px) rotate(-45deg);
-        }
-
-        /* HERO */
-        .hero-content {
-          padding: 0 20px;
-        }
-        .hero-eyebrow {
-          padding-top: 72px;
-          font-size: 9px;
-          margin-bottom: 10px;
-          opacity: 1 !important;
-        }
-        .hero-name {
-          font-size: clamp(36px, 10vw, 52px);
-        }
-        .hero-name .word span {
-          transform: translateY(0) !important;
-        }
-        .hero-stats {
-          right: 20px;
-          gap: 16px;
-          opacity: 1 !important;
-        }
-        .stat-number {
-          font-size: 32px;
-        }
-        .stat-label {
-          font-size: 7px;
-        }
-        .hero-bottom {
-          opacity: 1 !important;
-          padding-bottom: 24px;
-          gap: 12px;
-          max-width: calc(100% - 90px);
-        }
-        .hero-tagline {
-          font-size: 12px;
-          line-height: 1.6;
-        }
-        .hero-cta {
-          flex-wrap: wrap;
-          gap: 8px;
-        }
-        .btn {
-          padding: 10px 14px;
-          font-size: 9px;
-        }
-
-        /* ABOUT */
-        #about {
-          align-items: flex-start;
-        }
-        .about-inner {
-          grid-template-columns: 1fr;
-          padding: 64px 20px 40px;
-          gap: 24px;
-          height: auto;
-        }
-        .about-img-wrap {
-          order: -1;
-          height: auto;
-        }
-        .about-img-frame {
-          max-height: 240px;
-          aspect-ratio: 4/3;
-        }
-        .about-badge {
-          padding: 8px 12px;
-          bottom: -8px;
-          left: -6px;
-        }
-        .about-badge-value {
-          font-size: 10px;
-          white-space: normal;
-        }
-        .section-title {
-          font-size: clamp(28px, 8vw, 44px);
-        }
-        .section-header {
-          margin-bottom: 16px;
-        }
-        .about-text p {
-          font-size: 13px;
-          margin-bottom: 12px;
-        }
-
-        /* PROJECTS */
-        .projects-inner {
-          padding: 64px 20px 0;
-          height: auto;
-        }
-        .projects-grid {
-          grid-template-columns: 1fr !important;
-          grid-template-rows: auto !important;
-          background: transparent;
-          gap: 0;
-          overflow-y: visible;
-        }
-        .project-card:nth-child(n + 4) {
-          display: none;
-        }
-        .project-card {
-          padding: 16px 16px 48px;
-          border-bottom: 1px solid var(--border);
-        }
-        .project-card h3 {
-          font-size: 13px;
-        }
-        .project-card p {
-          font-size: 11px;
-        }
-        .projects-footer {
-          padding: 12px 0 16px;
-        }
-
-        /* TIMELINE */
-        #timeline {
-          align-items: flex-start;
-        }
-        .timeline-inner {
-          grid-template-columns: 1fr;
-          padding: 64px 20px 36px;
-          gap: 28px;
-          height: auto;
-        }
-        .timeline-aside {
-          order: 1;
-        }
-        .timeline-big {
-          font-size: clamp(40px, 12vw, 64px);
-          margin-bottom: 6px;
-        }
-        .timeline-aside p {
-          font-size: 12px;
-        }
-        .t-role {
-          font-size: 15px;
-        }
-        .timeline-item {
-          padding-bottom: 18px;
-          opacity: 1 !important;
-        }
-
-        /* SKILLS */
-        #skills {
-          align-items: flex-start;
-        }
-        .skills-inner {
-          grid-template-columns: 1fr;
-          padding: 64px 20px 36px;
-          gap: 24px;
-          height: auto;
-          align-items: start;
-        }
-        .skills-grid {
-          grid-template-columns: 1fr 1fr;
-          gap: 18px 14px;
-        }
-
-        /* CONTACT */
-        #contact {
-          align-items: flex-start;
-        }
-        .contact-inner {
-          grid-template-columns: 1fr;
-          padding: 64px 20px 24px;
-          gap: 24px;
-          height: auto;
-          align-items: start;
-        }
-        .contact-big {
-          font-size: clamp(30px, 9vw, 50px);
-          margin-bottom: 10px;
-          word-break: break-word;
-        }
-        .contact-sub {
-          font-size: 12px;
-        }
-        .contact-link {
-          padding: 12px 12px;
-          gap: 10px;
-          opacity: 1 !important;
-        }
-        .cl-text {
-          min-width: 0;
-        }
-        .cl-value {
-          font-size: 12px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-        .cl-arrow {
-          flex-shrink: 0;
-        }
-        .cl-icon svg {
-          stroke: var(--ink-mid) !important;
-          fill: none !important;
-        }
-        .contact-footer {
-          position: static;
-          padding: 16px 0 8px;
-          flex-direction: column;
-          gap: 8px;
-          text-align: center;
-          border-top: 1px solid var(--border);
-          margin-top: 8px;
-        }
-        .footer-links {
-          gap: 14px;
-          justify-content: center;
-        }
-      }
-
-      /* TABLET 769–1024px */
-      @media (min-width: 769px) and (max-width: 1024px) {
-        nav {
-          padding: 18px 36px;
-        }
-        .hero-content {
-          padding: 0 36px;
-        }
-        .hero-stats {
-          right: 36px;
-        }
-        .about-inner,
-        .timeline-inner,
-        .contact-inner,
-        .skills-inner {
-          padding: 64px 36px;
-          gap: 48px;
-        }
-        .projects-inner {
-          padding: 64px 36px 0;
-        }
-        .contact-big {
-          font-size: clamp(36px, 5vw, 72px);
-        }
-      }
-
       /* ── UTILS ── */
       ::-webkit-scrollbar {
         display: none;
@@ -1429,31 +983,13 @@
         <li><a href="#" data-target="skills">Skills</a></li>
         <li><a href="#" data-target="contact">Contact</a></li>
       </ul>
-      <button class="theme-toggle theme-toggle-desktop" id="themeToggleDesktop" aria-label="Switch theme">
-        <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
-        Aurora
-      </button>
-      <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </nav>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="#" data-target="about">About</a>
-      <a href="#" data-target="projects">Work</a>
-      <a href="#" data-target="timeline">Journey</a>
-      <a href="#" data-target="skills">Skills</a>
-      <a href="#" data-target="contact">Contact</a>
-    </div>
-    <!-- Mobile theme toggle — fixed bottom-right, shown only on mobile -->
-    <button class="theme-toggle theme-toggle-mobile" id="themeToggleMobile" aria-label="Switch theme">
-      <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
-      Aurora
-    </button>
 
     <!-- SNAP CONTAINER -->
     <div id="snap-container">
       <!-- ═══════ HERO ═══════ -->
       <section class="snap-section" id="hero">
         <canvas id="chrome"></canvas>
-        <canvas id="aurora"></canvas>
         <div class="hero-content">
           <div class="hero-eyebrow">Senior Data Analyst</div>
           <h1 class="hero-name">
@@ -1717,16 +1253,14 @@
             <p class="contact-sub">Have a data challenge, an insight to uncover, or want to connect? I'd love to hear from you.</p>
           </div>
           <div class="contact-links">
-            <a href="/cdn-cgi/l/email-protection#71161803180219131e15141c0104151831161c10181d5f121e1c" class="contact-link">
+            <a href="mailto:girishbodempudi@gmail.com" class="contact-link">
               <div class="cl-icon">
                 <svg viewBox="0 0 24 24">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                   <polyline points="22,6 12,13 2,6" />
                 </svg>
               </div>
-              <div class="cl-text">
-                <span class="cl-label">Email</span><span class="cl-value"><span class="__cf_email__" data-cfemail="24434d564d574c464b4041495451404d644349454d480a474b49">[email&#160;protected]</span></span>
-              </div>
+              <div class="cl-text"><span class="cl-label">Email</span><span class="cl-value">girishbodempudi@gmail.com</span></div>
               <span class="cl-arrow">↗</span>
             </a>
             <a href="https://www.linkedin.com/in/girishbodempudi/" target="_blank" class="contact-link">
@@ -1748,20 +1282,19 @@
               <span class="cl-arrow">↗</span>
             </a>
           </div>
-          <div class="contact-footer">
-            <p>© 2025 Girish Bodempudi. All rights reserved.</p>
-            <div class="footer-links">
-              <a href="https://www.linkedin.com/in/girishbodempudi/" target="_blank">LinkedIn</a>
-              <a href="https://github.com/ramgirish10" target="_blank">GitHub</a>
-              <a href="/cdn-cgi/l/email-protection#ec8b859e859f848e838889819c998885ac8b818d8580c28f8381">Email</a>
-            </div>
+        </div>
+        <div class="contact-footer">
+          <p>© 2025 Girish Bodempudi. All rights reserved.</p>
+          <div class="footer-links">
+            <a href="https://www.linkedin.com/in/girishbodempudi/" target="_blank">LinkedIn</a>
+            <a href="https://github.com/ramgirish10" target="_blank">GitHub</a>
+            <a href="mailto:girishbodempudi@gmail.com">Email</a>
           </div>
         </div>
       </section>
     </div>
     <!-- end #snap-container -->
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script>
       gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -1910,7 +1443,15 @@
         );
       });
 
-      // ── SECTION ENTER ANIMATIONS (triggered on nav) ay: 0.1 });
+      // ── SECTION ENTER ANIMATIONS (triggered on nav) ──
+      const animated = new Set(["hero"]);
+
+      function triggerSectionAnim(id) {
+        if (animated.has(id)) return;
+        animated.add(id);
+
+        if (id === "about") {
+          gsap.from("#about .about-text p", { opacity: 0, y: 20, duration: 0.65, stagger: 0.1, ease: "power3.out", delay: 0.1 });
           gsap.from("#about .about-img-wrap", { opacity: 0, x: 40, duration: 0.9, ease: "power3.out", delay: 0.2 });
         }
         if (id === "projects") {
@@ -1959,7 +1500,7 @@
           c.classList.toggle("hidden", i >= show);
         });
       }
-      if (window.innerWidth > 768) setResponsiveProjects();
+      setResponsiveProjects();
 
       // Reset timeline item initial state for animation
       document.querySelectorAll(".timeline-item").forEach((el) => {
@@ -1968,76 +1509,6 @@
       // skill groups visible by default
       document.querySelectorAll(".contact-link").forEach((el) => {
         gsap.set(el, { opacity: 0, x: 24 });
-      });
-
-      // ── AURORA CANVAS ──
-      const acv = document.getElementById("aurora");
-      const actx = acv.getContext("2d");
-      let at = 0;
-      function rsza() {
-        acv.width = acv.offsetWidth;
-        acv.height = acv.offsetHeight;
-      }
-      rsza();
-      window.addEventListener("resize", rsza);
-
-      function drawAurora() {
-        const w = acv.width, h = acv.height;
-        actx.clearRect(0, 0, w, h);
-        actx.fillStyle = "#0d0d12";
-        actx.fillRect(0, 0, w, h);
-        const bands = [
-          { y: h * 0.25, hue: 160, amp: 80, speed: 0.4 },
-          { y: h * 0.45, hue: 200, amp: 60, speed: 0.3 },
-          { y: h * 0.65, hue: 280, amp: 50, speed: 0.5 },
-          { y: h * 0.35, hue: 120, amp: 70, speed: 0.35 },
-        ];
-        bands.forEach(({ y, hue, amp, speed }) => {
-          const grad = actx.createLinearGradient(0, y - amp, 0, y + amp);
-          const h1 = (hue + at * 20) % 360;
-          grad.addColorStop(0,   `hsla(${h1},80%,60%,0)`);
-          grad.addColorStop(0.4, `hsla(${h1},80%,60%,0.18)`);
-          grad.addColorStop(0.5, `hsla(${h1},80%,65%,0.28)`);
-          grad.addColorStop(0.6, `hsla(${h1},80%,60%,0.18)`);
-          grad.addColorStop(1,   `hsla(${h1},80%,60%,0)`);
-          actx.beginPath();
-          for (let x = 0; x <= w; x += 3) {
-            const dy = Math.sin((x / w) * Math.PI * 4 + at * speed + hue) * amp * 0.4
-                     + Math.sin((x / w) * Math.PI * 2 + at * speed * 0.7) * amp * 0.3;
-            x === 0 ? actx.moveTo(x, y + dy) : actx.lineTo(x, y + dy);
-          }
-          actx.strokeStyle = `hsla(${h1},80%,70%,0.12)`;
-          actx.lineWidth = amp * 1.8;
-          actx.stroke();
-          actx.fillStyle = grad;
-          actx.fill();
-        });
-        at += 0.005;
-        requestAnimationFrame(drawAurora);
-      }
-      drawAurora();
-
-      // ── THEME TOGGLE ──
-      let isAurora = false;
-      const MOON = '<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-      const SUN  = '<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
-
-      function syncToggleLabel() {
-        document.querySelectorAll(".theme-toggle").forEach(btn => {
-          btn.innerHTML = isAurora ? SUN + " Chrome" : MOON + " Aurora";
-        });
-      }
-      syncToggleLabel(); // set initial state
-
-      function toggleTheme() {
-        isAurora = !isAurora;
-        document.body.classList.toggle("aurora", isAurora);
-        syncToggleLabel();
-        rsz(); rsza(); // keep canvases sized correctly
-      }
-
-      document.querySelectorAll(".theme-toggle").forEach(btn => {
-        btn.addEventListener("click", toggleTheme);
       });
     </script>
   </body>
