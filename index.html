@@ -11,9 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
     <style>
-      *,
-      *::before,
-      *::after {
+      *, *::before, *::after {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -24,8 +22,8 @@
         --bg2: #f0eeeb;
         --bg3: #e8e6e2;
         --surface: #e0deda;
-        --border: rgba(0, 0, 0, 0.07);
-        --border2: rgba(0, 0, 0, 0.13);
+        --border: rgba(0,0,0,0.07);
+        --border2: rgba(0,0,0,0.13);
         --ink: #0a0a0a;
         --ink-mid: #555;
         --ink-muted: #888;
@@ -35,10 +33,13 @@
         --body: "DM Sans", sans-serif;
       }
 
-      /* ── SCROLL SNAP CONTAINER ── */
+      /* ════════════════════════════════
+         SCROLL SNAP — desktop & laptop
+         html/body locked, snap-container scrolls
+      ════════════════════════════════ */
       html {
-        overflow: hidden; /* hide default scrollbar — JS handles snapping */
         height: 100%;
+        overflow: hidden;
         cursor: none;
         font-family: var(--body);
         color: var(--ink);
@@ -48,22 +49,16 @@
         height: 100%;
         overflow: hidden;
       }
-
-      /* The actual scroll container */
       #snap-container {
         height: 100vh;
         overflow-y: scroll;
         scroll-snap-type: y mandatory;
         scroll-behavior: smooth;
         overscroll-behavior: none;
-        /* hide scrollbar visually */
         scrollbar-width: none;
       }
-      #snap-container::-webkit-scrollbar {
-        display: none;
-      }
+      #snap-container::-webkit-scrollbar { display: none; }
 
-      /* Every section snaps */
       .snap-section {
         scroll-snap-align: start;
         scroll-snap-stop: always;
@@ -73,7 +68,9 @@
         flex-shrink: 0;
       }
 
-      /* ── CURSOR ── */
+      /* ════════════════════════════════
+         CURSOR  (desktop/laptop only)
+      ════════════════════════════════ */
       .cursor {
         position: fixed;
         width: 10px;
@@ -89,15 +86,12 @@
         position: fixed;
         width: 34px;
         height: 34px;
-        border: 1px solid rgba(0, 0, 0, 0.18);
+        border: 1px solid rgba(0,0,0,0.18);
         border-radius: 50%;
         pointer-events: none;
         z-index: 9998;
         transform: translate(-50%, -50%);
-        transition:
-          width 0.3s,
-          height 0.3s,
-          border-color 0.3s;
+        transition: width 0.3s, height 0.3s, border-color 0.3s;
       }
       .cursor-ring.hover {
         width: 52px;
@@ -105,7 +99,9 @@
         border-color: var(--ink);
       }
 
-      /* ── PROGRESS BAR ── */
+      /* ════════════════════════════════
+         PROGRESS BAR
+      ════════════════════════════════ */
       .progress-bar {
         position: fixed;
         top: 0;
@@ -118,7 +114,9 @@
         transition: transform 0.1s;
       }
 
-      /* ── NOISE ── */
+      /* ════════════════════════════════
+         NOISE OVERLAY
+      ════════════════════════════════ */
       .noise {
         position: fixed;
         inset: 0;
@@ -128,7 +126,9 @@
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       }
 
-      /* ── SECTION DOTS NAV ── */
+      /* ════════════════════════════════
+         DOT NAV  (desktop/laptop only)
+      ════════════════════════════════ */
       .dot-nav {
         position: fixed;
         right: 28px;
@@ -154,7 +154,9 @@
         transform: scale(1.4);
       }
 
-      /* ── NAV ── */
+      /* ════════════════════════════════
+         NAV
+      ════════════════════════════════ */
       nav {
         position: fixed;
         top: 0;
@@ -168,7 +170,7 @@
         transition: all 0.4s;
       }
       nav.scrolled {
-        background: rgba(247, 247, 245, 0.92);
+        background: rgba(247,247,245,0.92);
         backdrop-filter: blur(20px);
         border-bottom: 1px solid var(--border);
       }
@@ -179,9 +181,8 @@
         text-decoration: none;
         letter-spacing: 0.08em;
       }
-      .nav-logo span {
-        color: var(--ink-muted);
-      }
+      .nav-logo span { color: var(--ink-muted); }
+
       .nav-links {
         display: flex;
         gap: 40px;
@@ -209,14 +210,59 @@
         transform-origin: left;
         transition: transform 0.3s;
       }
-      .nav-links a:hover {
-        color: var(--ink);
-      }
-      .nav-links a:hover::after {
-        transform: scaleX(1);
-      }
+      .nav-links a:hover { color: var(--ink); }
+      .nav-links a:hover::after { transform: scaleX(1); }
 
-      /* ── BUTTONS ── */
+      /* Hamburger — hidden on desktop, shown on mobile */
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 6px;
+        z-index: 1001;
+      }
+      .hamburger span {
+        display: block;
+        width: 22px;
+        height: 1.5px;
+        background: var(--ink);
+        transition: all 0.28s;
+        transform-origin: center;
+      }
+      .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+      .hamburger.open span:nth-child(2) { opacity: 0; }
+      .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+      /* Mobile menu overlay — hidden on desktop */
+      .mobile-menu {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        z-index: 998;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+      }
+      .mobile-menu.open { display: flex; }
+      .mobile-menu a {
+        font-family: var(--mono);
+        font-size: 14px;
+        color: var(--ink-muted);
+        text-decoration: none;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        transition: color 0.2s;
+      }
+      .mobile-menu a:hover { color: var(--ink); }
+
+      /* ════════════════════════════════
+         BUTTONS
+      ════════════════════════════════ */
       .btn {
         display: inline-flex;
         align-items: center;
@@ -229,31 +275,26 @@
         text-transform: uppercase;
         transition: all 0.25s;
         white-space: nowrap;
+        cursor: pointer;
+        border: none;
       }
       .btn-primary {
         background: var(--ink);
         color: #fff;
       }
-      .btn-primary:hover {
-        background: #333;
-        transform: translateY(-2px);
-      }
+      .btn-primary:hover { background: #333; transform: translateY(-2px); }
       .btn-ghost {
         border: 1px solid var(--border2);
         color: var(--ink-mid);
+        background: transparent;
       }
-      .btn-ghost:hover {
-        border-color: var(--ink);
-        color: var(--ink);
-        transform: translateY(-2px);
-      }
+      .btn-ghost:hover { border-color: var(--ink); color: var(--ink); transform: translateY(-2px); }
 
       /* ════════════════════════════════
-   HERO
-════════════════════════════════ */
-      #hero {
-        background: var(--bg);
-      }
+         HERO
+      ════════════════════════════════ */
+      #hero { background: var(--bg); }
+
       canvas#chrome {
         position: absolute;
         inset: 0;
@@ -309,9 +350,7 @@
         color: transparent;
         -webkit-text-stroke: 2px var(--ink);
       }
-      .hero-spacer {
-        flex: 1;
-      }
+      .hero-spacer { flex: 1; }
       .hero-bottom {
         display: flex;
         flex-direction: column;
@@ -326,14 +365,9 @@
         color: var(--ink-mid);
         line-height: 1.75;
       }
-      .hero-tagline strong {
-        color: var(--ink);
-        font-weight: 600;
-      }
-      .hero-cta {
-        display: flex;
-        gap: 12px;
-      }
+      .hero-tagline strong { color: var(--ink); font-weight: 600; }
+      .hero-cta { display: flex; gap: 12px; }
+
       .hero-stats {
         position: absolute;
         right: 64px;
@@ -364,8 +398,8 @@
       }
 
       /* ════════════════════════════════
-   ABOUT — 100vh two column
-════════════════════════════════ */
+         ABOUT
+      ════════════════════════════════ */
       #about {
         background: var(--bg2);
         display: flex;
@@ -381,7 +415,7 @@
         align-items: center;
       }
 
-      /* section header shared */
+      /* shared section header */
       .section-header {
         display: flex;
         align-items: flex-start;
@@ -422,13 +456,8 @@
         margin-bottom: 16px;
         font-weight: 300;
       }
-      .about-text p:last-child {
-        margin-bottom: 0;
-      }
-      .about-text p strong {
-        color: var(--ink);
-        font-weight: 500;
-      }
+      .about-text p:last-child { margin-bottom: 0; }
+      .about-text p strong { color: var(--ink); font-weight: 500; }
 
       .about-img-wrap {
         position: relative;
@@ -439,9 +468,12 @@
       }
       .about-img-frame {
         position: relative;
-        width: 100%;
-        max-height: calc(100vh - 160px);
-        aspect-ratio: 3/4;
+        /* Square: height drives the size, aspect-ratio makes width equal.
+           height is capped so it never overflows the section. */
+        height: min(calc(100vh - 200px), 100%);
+        width: auto;
+        aspect-ratio: 1 / 1;
+        max-width: 100%;
         overflow: visible;
         background: var(--surface);
       }
@@ -454,11 +486,8 @@
         display: block;
         overflow: hidden;
       }
-      .about-img-frame:hover img {
-        filter: grayscale(0%);
-      }
+      .about-img-frame:hover img { filter: grayscale(0%); }
 
-      /* animated border ring behind photo */
       .about-img-ring {
         position: absolute;
         inset: -12px;
@@ -476,15 +505,8 @@
         z-index: -1;
       }
       @keyframes ringPulse {
-        0%,
-        100% {
-          opacity: 0.4;
-          transform: scale(1);
-        }
-        50% {
-          opacity: 1;
-          transform: scale(1.008);
-        }
+        0%, 100% { opacity: 0.4; transform: scale(1); }
+        50%       { opacity: 1;   transform: scale(1.008); }
       }
 
       .about-badge {
@@ -500,7 +522,7 @@
       .about-badge-label {
         font-family: var(--mono);
         font-size: 9px;
-        color: rgba(255, 255, 255, 0.4);
+        color: rgba(255,255,255,0.4);
         letter-spacing: 0.2em;
         text-transform: uppercase;
         display: block;
@@ -515,8 +537,8 @@
       }
 
       /* ════════════════════════════════
-   PROJECTS — responsive grid
-════════════════════════════════ */
+         PROJECTS
+      ════════════════════════════════ */
       #projects {
         background: var(--bg);
         display: flex;
@@ -534,14 +556,13 @@
         display: grid;
         gap: 1px;
         background: var(--border);
-        /* default 2 rows × 3 cols — JS overrides for laptop */
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(2, 1fr);
         overflow: hidden;
       }
       .project-card {
         background: var(--bg);
-        padding: 28px 28px 44px;
+        padding: 28px 28px 56px;
         text-decoration: none;
         color: inherit;
         display: block;
@@ -552,24 +573,17 @@
       .project-card::before {
         content: "";
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
+        top: 0; left: 0; right: 0;
         height: 2px;
         background: var(--ink);
         transform: scaleX(0);
         transform-origin: left;
         transition: transform 0.35s;
       }
-      .project-card:hover {
-        background: var(--bg2);
-      }
-      .project-card:hover::before {
-        transform: scaleX(1);
-      }
-      .project-card:hover .card-arrow {
-        transform: translate(3px, -3px);
-      }
+      .project-card:hover { background: var(--bg2); }
+      .project-card:hover::before { transform: scaleX(1); }
+      .project-card:hover .card-arrow { transform: translate(3px, -3px); }
+
       .card-num {
         font-family: var(--mono);
         font-size: 9px;
@@ -608,10 +622,7 @@
         height: 10px;
         stroke: var(--ink-mid);
       }
-      /* hide cards beyond the responsive limit */
-      .project-card.hidden {
-        display: none;
-      }
+      .project-card.hidden { display: none; }
 
       .projects-footer {
         padding: 20px 0 24px;
@@ -622,8 +633,8 @@
       }
 
       /* ════════════════════════════════
-   TIMELINE — 100vh two column
-════════════════════════════════ */
+         TIMELINE
+      ════════════════════════════════ */
       #timeline {
         background: var(--bg2);
         display: flex;
@@ -644,9 +655,7 @@
       .timeline-track::before {
         content: "";
         position: absolute;
-        left: 0;
-        top: 4px;
-        bottom: 4px;
+        left: 0; top: 4px; bottom: 4px;
         width: 1px;
         background: var(--border2);
       }
@@ -655,9 +664,8 @@
         padding-bottom: 28px;
         opacity: 0;
       }
-      .timeline-item:last-child {
-        padding-bottom: 0;
-      }
+      .timeline-item:last-child { padding-bottom: 0; }
+
       .timeline-dot {
         position: absolute;
         left: -34px;
@@ -667,9 +675,7 @@
         border: 1.5px solid var(--ink-dim);
         background: var(--bg2);
         transform: rotate(45deg);
-        transition:
-          background 0.3s,
-          border-color 0.3s;
+        transition: background 0.3s, border-color 0.3s;
       }
       .timeline-item.active .timeline-dot {
         background: var(--ink);
@@ -697,7 +703,6 @@
         letter-spacing: 0.04em;
       }
 
-      /* right side typographic block */
       .timeline-aside {
         display: flex;
         flex-direction: column;
@@ -726,8 +731,8 @@
       }
 
       /* ════════════════════════════════
-   SKILLS — 100vh
-════════════════════════════════ */
+         SKILLS
+      ════════════════════════════════ */
       #skills {
         background: var(--bg);
         display: flex;
@@ -741,17 +746,13 @@
         gap: 80px;
         align-items: start;
       }
-      .skills-left .section-header {
-        margin-bottom: 0;
-      }
+      .skills-left .section-header { margin-bottom: 0; }
       .skills-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 40px 60px;
       }
-      .skill-group {
-        opacity: 1;
-      }
+      .skill-group { opacity: 1; }
       .skill-group-title {
         font-family: var(--mono);
         font-size: 9px;
@@ -769,11 +770,7 @@
         height: 1px;
         background: var(--border);
       }
-      .skill-pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-      }
+      .skill-pills { display: flex; flex-wrap: wrap; gap: 6px; }
       .skill-pill {
         padding: 6px 13px;
         border: 1px solid var(--border2);
@@ -786,15 +783,11 @@
         cursor: default;
         opacity: 1;
       }
-      .skill-pill:hover {
-        background: var(--ink);
-        color: #fff;
-        border-color: var(--ink);
-      }
+      .skill-pill:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
 
       /* ════════════════════════════════
-   CONTACT — 100vh
-════════════════════════════════ */
+         CONTACT
+      ════════════════════════════════ */
       #contact {
         background: var(--bg2);
         display: flex;
@@ -802,7 +795,8 @@
       }
       .contact-inner {
         width: 100%;
-        padding: 80px 64px;
+        height: 100%;
+        padding: 80px 64px 80px;
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 80px;
@@ -851,21 +845,15 @@
       .contact-link::before {
         content: "";
         position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
+        left: 0; top: 0; bottom: 0;
         width: 2px;
         background: var(--ink);
         transform: scaleY(0);
         transition: transform 0.3s;
       }
-      .contact-link:hover {
-        background: var(--surface);
-        border-color: var(--border2);
-      }
-      .contact-link:hover::before {
-        transform: scaleY(1);
-      }
+      .contact-link:hover { background: var(--surface); border-color: var(--border2); }
+      .contact-link:hover::before { transform: scaleY(1); }
+
       .cl-icon {
         width: 32px;
         height: 32px;
@@ -882,9 +870,7 @@
         fill: none;
         stroke-width: 1.5;
       }
-      .cl-text {
-        flex: 1;
-      }
+      .cl-text { flex: 1; }
       .cl-label {
         font-family: var(--mono);
         font-size: 9px;
@@ -894,25 +880,15 @@
         display: block;
         margin-bottom: 2px;
       }
-      .cl-value {
-        font-size: 14px;
-        color: var(--ink);
-      }
+      .cl-value { font-size: 14px; color: var(--ink); }
       .cl-arrow {
         font-size: 16px;
         color: var(--ink-dim);
-        transition:
-          transform 0.25s,
-          color 0.25s;
+        transition: transform 0.25s, color 0.25s;
       }
-      .contact-link:hover .cl-arrow {
-        transform: translate(3px, -3px);
-        color: var(--ink);
-      }
+      .contact-link:hover .cl-arrow { transform: translate(3px,-3px); color: var(--ink); }
 
-      /* ════════════════════════════════
-   FOOTER inside contact section
-════════════════════════════════ */
+      /* Footer — absolute inside #contact (which is 100vh, position:relative) */
       .contact-footer {
         position: absolute;
         bottom: 0;
@@ -930,10 +906,7 @@
         color: var(--ink-dim);
         letter-spacing: 0.1em;
       }
-      .footer-links {
-        display: flex;
-        gap: 24px;
-      }
+      .footer-links { display: flex; gap: 24px; }
       .footer-links a {
         font-family: var(--mono);
         font-size: 10px;
@@ -943,21 +916,298 @@
         text-transform: uppercase;
         transition: color 0.25s;
       }
-      .footer-links a:hover {
-        color: var(--ink);
+      .footer-links a:hover { color: var(--ink); }
+
+      /* ════════════════════════════════
+         UTILS
+      ════════════════════════════════ */
+      ::-webkit-scrollbar { display: none; }
+      ::selection { background: var(--ink); color: #fff; }
+
+      /* ════════════════════════════════════════════════════════
+         MOBILE  ≤ 768px
+         Strategy:
+         - Hero stays height:100vh so canvas fills it correctly.
+           All content forced visible (GSAP still runs but we
+           don't rely on it — !important on initial hidden props).
+         - Every other section: height auto, overflow-y auto,
+           scroll-snap disabled so content never clips.
+         - No JS layout changes on mobile (setResponsiveProjects
+           is guarded to desktop-only in the script).
+         - Hamburger replaces nav links.
+         - Cursor and dot-nav hidden (touch device).
+      ════════════════════════════════════════════════════════ */
+      @media (max-width: 768px) {
+
+        /* ── system ── */
+        html { cursor: auto; }
+        .cursor, .cursor-ring { display: none; }
+        .dot-nav { display: none; }
+        .noise { display: none; } /* saves a paint layer on mobile */
+
+        /* ── snap: only hero snaps, others flow freely ── */
+        #snap-container {
+          scroll-snap-type: none; /* disable snap so sections aren't cut off */
+          overflow-y: auto;
+        }
+        .snap-section {
+          height: auto;
+          min-height: 100svh; /* svh = small viewport height, accounts for browser chrome */
+          overflow: visible;
+          scroll-snap-align: none;
+          scroll-snap-stop: unset;
+        }
+        /* hero still fills exactly one screen */
+        #hero {
+          height: 100svh;
+          min-height: 100svh;
+          overflow: hidden;
+        }
+
+        /* ── nav ── */
+        nav { padding: 16px 20px; }
+        .nav-links { display: none; }
+        .hamburger { display: flex; }
+
+        /* ── HERO ──
+           canvas is position:absolute inset:0 — fine.
+           hero-content is position:absolute inset:0 — fine.
+           Force all GSAP-hidden elements visible immediately.
+           GSAP still runs and animates them which looks fine;
+           the !important just means they're never invisible
+           if GSAP is slow or blocked.
+        ── */
+        .hero-content { padding: 0 24px; }
+        .hero-eyebrow {
+          padding-top: 80px;
+          font-size: 9px;
+          margin-bottom: 12px;
+          opacity: 1 !important;
+        }
+        /* Bodempudi is long — 9vw keeps it in viewport at all mobile widths */
+        .hero-name { font-size: clamp(32px, 9vw, 48px); }
+        /* word spans start translateY(110%) — force them visible */
+        .hero-name .word span { transform: none !important; }
+        /* stats: keep on right side, scale down */
+        .hero-stats {
+          right: 16px;
+          gap: 18px;
+          opacity: 1 !important;
+        }
+        .stat-number { font-size: 28px; }
+        .stat-label { font-size: 7px; }
+        /* bottom text: don't run under the stats */
+        .hero-bottom {
+          opacity: 1 !important;
+          padding-bottom: 32px;
+          gap: 14px;
+          max-width: calc(100% - 80px);
+        }
+        .hero-tagline { font-size: 12px; line-height: 1.6; }
+        .hero-cta { flex-wrap: wrap; gap: 8px; }
+        .btn { padding: 11px 16px; font-size: 9px; }
+
+        /* ── ABOUT ──
+           Single column. Image first, text below.
+        ── */
+        #about { align-items: flex-start; }
+        .about-inner {
+          grid-template-columns: 1fr;
+          height: auto;
+          padding: 80px 24px 48px;
+          gap: 32px;
+        }
+        /* image column: push to top with order */
+        .about-img-wrap { order: -1; height: auto; }
+        .about-img-frame {
+          height: min(70vw, 60vh);
+          width: auto;
+          aspect-ratio: 1 / 1;
+          max-width: 100%;
+        }
+        .about-badge {
+          padding: 10px 14px;
+          bottom: -10px;
+          left: -10px;
+        }
+        .about-badge-value { font-size: 11px; white-space: normal; }
+        .section-title { font-size: clamp(32px, 8vw, 48px); }
+        .section-header { margin-bottom: 20px; }
+        .about-text p { font-size: 13px; margin-bottom: 14px; }
+
+        /* ── PROJECTS ──
+           Single column, 3 cards max, no JS grid overrides.
+           Extra bottom padding so the absolute arrow clears text.
+        ── */
+        #projects { display: block; }
+        .projects-inner {
+          height: auto;
+          padding: 80px 24px 0;
+          display: block;
+        }
+        .projects-grid {
+          display: block !important; /* override any JS inline style */
+          background: transparent;
+        }
+        .project-card {
+          display: block !important; /* show all by default, then JS hides extras */
+          padding: 20px 20px 52px;
+          border-bottom: 1px solid var(--border);
+          margin-bottom: 0;
+        }
+        /* show only first 3 — JS runs on desktop so on mobile we use CSS */
+        .project-card:nth-child(n+4) { display: none !important; }
+        .project-card h3 { font-size: 14px; }
+        .project-card p { font-size: 12px; }
+        .projects-footer { padding: 16px 0 20px; }
+
+        /* ── TIMELINE ──
+           Single column. Track (left), then aside below.
+        ── */
+        #timeline { align-items: flex-start; }
+        .timeline-inner {
+          grid-template-columns: 1fr;
+          height: auto;
+          padding: 80px 24px 48px;
+          gap: 40px;
+        }
+        /* aside (5+ Years) goes below the track */
+        .timeline-aside { order: 2; }
+        .timeline-big { font-size: clamp(48px, 13vw, 72px); margin-bottom: 12px; }
+        .timeline-aside p { font-size: 13px; }
+        .t-role { font-size: 17px; }
+        .timeline-item {
+          padding-bottom: 20px;
+          opacity: 1 !important; /* GSAP starts these at 0 — force visible */
+        }
+        /* also reset x offset that GSAP sets via gsap.set */
+        .timeline-item { transform: none !important; }
+
+        /* ── SKILLS ──
+           Single column.
+        ── */
+        #skills { align-items: flex-start; }
+        .skills-inner {
+          grid-template-columns: 1fr;
+          height: auto;
+          padding: 80px 24px 48px;
+          gap: 36px;
+          align-items: start;
+        }
+        .skills-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 24px 20px;
+        }
+        .skills-left p { font-size: 13px !important; }
+
+        /* ── CONTACT ──
+           Single column. Links always visible.
+           Footer flows at the bottom of the scrollable content.
+        ── */
+        #contact { align-items: flex-start; }
+        .contact-inner {
+          grid-template-columns: 1fr;
+          height: auto;
+          padding: 80px 24px 100px; /* 100px bottom leaves room for footer */
+          gap: 32px;
+          align-items: start;
+        }
+        .contact-big { font-size: clamp(36px, 10vw, 56px); margin-bottom: 14px; }
+        .contact-sub { font-size: 13px; }
+        /* contact-link starts at opacity:0 — force visible */
+        .contact-link {
+          opacity: 1 !important;
+          transform: none !important;
+          padding: 16px 16px;
+          gap: 12px;
+        }
+        .cl-icon svg { stroke: var(--ink-mid); } /* prevent browser link-colour bleed */
+        .cl-value { font-size: 13px; }
+        /* footer: stays absolute but contact-inner padding-bottom:100px
+           means content won't overlap it */
+        .contact-footer {
+          padding: 16px 24px;
+          flex-direction: column;
+          gap: 8px;
+          text-align: center;
+        }
+        .footer-links { gap: 16px; justify-content: center; }
       }
 
-      /* ── UTILS ── */
-      ::-webkit-scrollbar {
-        display: none;
+      /* ════════════════════════════════
+         SHORT SCREENS  (laptops ≤ 800px tall, wider than 768px)
+         All sections stay 100vh+snap but everything scales down
+         so content fits without clipping.
+      ════════════════════════════════ */
+      @media (min-width: 769px) and (max-height: 800px) {
+
+        /* shared: shrink the section title across all sections */
+        .section-title { font-size: clamp(22px, 2.6vw, 36px); }
+        .section-header { margin-bottom: 14px; gap: 10px; }
+        .section-num { padding-top: 5px; }
+
+        /* ABOUT */
+        .about-inner { padding: 48px 64px; gap: 40px; }
+        .about-text p { font-size: 13px; margin-bottom: 10px; line-height: 1.6; }
+        .about-img-frame { height: min(calc(100vh - 130px), 100%); width: auto; max-width: 100%; }
+
+        /* PROJECTS */
+        .projects-inner { padding: 48px 64px 0; }
+        .projects-footer { padding: 10px 0 12px; }
+        .project-card { padding: 16px 18px 38px; }
+        .project-card h3 { font-size: 13px; margin-bottom: 6px; }
+        .project-card p { font-size: 11px; line-height: 1.5; }
+        .card-num { margin-bottom: 8px; }
+
+        /* TIMELINE */
+        .timeline-inner { padding: 48px 64px; gap: 32px; }
+        .timeline-item { padding-bottom: 8px; }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .t-date { font-size: 8px; margin-bottom: 1px; }
+        .t-role { font-size: 13px; margin-bottom: 1px; line-height: 1.15; }
+        .t-org { font-size: 10px; }
+        .timeline-dot { width: 8px; height: 8px; left: -32px; }
+        .timeline-big { font-size: clamp(36px, 5vw, 56px); margin-bottom: 8px; }
+        .timeline-aside p { font-size: 12px; line-height: 1.5; }
+
+        /* SKILLS */
+        .skills-inner { padding: 48px 64px; gap: 40px; }
+        .skills-inner > .skills-left > p { font-size: 13px !important; margin-top: 10px !important; line-height: 1.6 !important; }
+        .skills-grid { gap: 20px 32px; }
+        .skill-group-title { margin-bottom: 7px; }
+        .skill-pill { padding: 4px 10px; font-size: 9px; }
+
+        /* CONTACT */
+        .contact-inner { padding: 48px 64px 64px; gap: 32px; }
+        .contact-big { font-size: clamp(28px, 3.8vw, 50px); margin-bottom: 12px; }
+        .contact-sub { font-size: 12px; line-height: 1.6; }
+        .contact-link { padding: 12px 16px; gap: 12px; }
+        .cl-value { font-size: 12px; }
+        .contact-footer { padding: 10px 64px; }
+        .contact-footer p { font-size: 9px; }
+        .footer-links a { font-size: 9px; }
       }
-      ::selection {
-        background: var(--ink);
-        color: #fff;
+
+      /* ════════════════════════════════
+         TABLET  769px – 1024px
+         Same layout as desktop, just tighter padding
+      ════════════════════════════════ */
+      @media (min-width: 769px) and (max-width: 1024px) {
+        nav { padding: 18px 36px; }
+        .hero-content { padding: 0 36px; }
+        .hero-stats { right: 36px; }
+        .about-inner,
+        .timeline-inner,
+        .skills-inner { padding: 64px 36px; gap: 48px; }
+        .contact-inner { padding: 64px 36px 80px; gap: 48px; }
+        .projects-inner { padding: 60px 36px 0; }
+        .contact-footer { padding: 20px 36px; }
       }
+
     </style>
   </head>
   <body>
+
     <div class="cursor" id="cursor"></div>
     <div class="cursor-ring" id="cursorRing"></div>
     <div class="noise"></div>
@@ -983,10 +1233,23 @@
         <li><a href="#" data-target="skills">Skills</a></li>
         <li><a href="#" data-target="contact">Contact</a></li>
       </ul>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
     </nav>
+
+    <!-- MOBILE MENU OVERLAY -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#" data-mobile-target="about">About</a>
+      <a href="#" data-mobile-target="projects">Work</a>
+      <a href="#" data-mobile-target="timeline">Journey</a>
+      <a href="#" data-mobile-target="skills">Skills</a>
+      <a href="#" data-mobile-target="contact">Contact</a>
+    </div>
 
     <!-- SNAP CONTAINER -->
     <div id="snap-container">
+
       <!-- ═══════ HERO ═══════ -->
       <section class="snap-section" id="hero">
         <canvas id="chrome"></canvas>
@@ -1001,7 +1264,7 @@
             <p class="hero-tagline">Transforming raw data into <strong>strategic insights</strong> — where precision meets creativity and numbers become narratives.</p>
             <div class="hero-cta">
               <a href="#" class="btn btn-primary" data-target="projects">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 View Work
               </a>
               <a href="#" class="btn btn-ghost" data-target="contact">Get In Touch</a>
@@ -1030,7 +1293,7 @@
           </div>
           <div class="about-img-wrap">
             <div class="about-img-frame">
-              <img src="images/profile.jpg" alt="Girish Bodempudi" onerror="this.style.display = 'none'" />
+              <img src="images/profile.jpg" alt="Girish Bodempudi" onerror="this.style.display='none'" />
               <div class="about-img-ring"></div>
               <div class="about-img-ring2"></div>
               <div class="about-badge">
@@ -1055,78 +1318,60 @@
               <div class="card-num">001</div>
               <h3>Loan Default Risk Prediction</h3>
               <p>Predictive model to assess loan default risk. Led data preprocessing and model development to improve accuracy for risk management.</p>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
-              </div>
+              <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
             </a>
             <a href="https://github.com/ramgirish10/Youtube_Statistics_Data_Engineering" target="_blank" class="project-card">
               <div class="card-num">002</div>
               <h3>YouTube Statistics Data Engineering</h3>
               <p>Scalable ETL system using AWS to ingest, transform, and analyse YouTube data with Amazon QuickSight dashboards.</p>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
-              </div>
+              <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
             </a>
             <a href="https://github.com/ramgirish10/Covid-19_Data_Engineering" target="_blank" class="project-card">
               <div class="card-num">003</div>
               <h3>COVID-19 Data Engineering</h3>
               <p>AWS pipeline to analyse COVID-19 data. Visualised insights with Tableau and Power BI for pandemic impact analysis.</p>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
-              </div>
+              <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
             </a>
             <a href="https://github.com/ramgirish10/Churn_Prediction_Analysis" target="_blank" class="project-card">
               <div class="card-num">004</div>
               <h3>Churn Prediction Analysis</h3>
               <p>ML model to predict bank customer churn. Identified key factors enabling targeted retention strategies.</p>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
-              </div>
+              <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
             </a>
             <a href="https://github.com/ramgirish10/Real_Estate_Analysis" target="_blank" class="project-card">
               <div class="card-num">005</div>
               <h3>Real Estate Analysis</h3>
               <p>Real estate market trend analysis and predictive models to estimate property prices for investment decisions.</p>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
-              </div>
+              <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
             </a>
             <a href="https://github.com/ramgirish10/Revenue_Insights_Dashboard" target="_blank" class="project-card">
               <div class="card-num">006</div>
               <h3>Revenue Analysis Dashboard</h3>
               <p>Tableau dashboards to visualise revenue metrics and deliver strategic insights into trends and profitability.</p>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
-              </div>
+              <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
             </a>
             <a href="https://github.com/ramgirish10/Sales_Insights_Dashboard" target="_blank" class="project-card">
               <div class="card-num">007</div>
               <h3>Sales Insights Dashboard</h3>
               <p>Interactive Power BI dashboards for sales metrics, cleaning and modelling data from MySQL for actionable insights.</p>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
-              </div>
+              <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
             </a>
             <a href="https://github.com/ramgirish10/HR_Dashboard" target="_blank" class="project-card">
               <div class="card-num">008</div>
               <h3>HR Dashboard</h3>
               <p>Power BI dashboards visualising HR metrics including employee demographics, attendance, and performance.</p>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
-              </div>
+              <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
             </a>
             <a href="https://github.com/ramgirish10/Tokyo_Olympics_Data_Engineering" target="_blank" class="project-card">
               <div class="card-num">009</div>
               <h3>Tokyo 2021 Olympics Pipeline</h3>
               <p>Azure data pipeline to analyse Olympics data. Multi-platform visualisations in Power BI, Looker Studio, and Tableau.</p>
-              <div class="card-arrow">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10" /></svg>
-              </div>
+              <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
             </a>
           </div>
           <div class="projects-footer">
             <a href="https://github.com/ramgirish10" target="_blank" class="btn btn-ghost">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
               All Projects on GitHub
             </a>
           </div>
@@ -1197,7 +1442,7 @@
               <h2 class="section-title">My<br /><em>Expertise</em></h2>
               <div class="section-rule"></div>
             </div>
-            <p style="font-size: 15px; color: var(--ink-mid); font-weight: 300; line-height: 1.7; margin-top: 20px; max-width: 380px">Five years of hands-on experience across analytics, engineering, and visualisation — across finance, healthcare, and e-commerce domains.</p>
+            <p style="font-size:15px;color:var(--ink-mid);font-weight:300;line-height:1.7;margin-top:20px;max-width:380px">Five years of hands-on experience across analytics, engineering, and visualisation — across finance, healthcare, and e-commerce domains.</p>
           </div>
           <div class="skills-grid">
             <div class="skill-group">
@@ -1256,29 +1501,38 @@
             <a href="mailto:girishbodempudi@gmail.com" class="contact-link">
               <div class="cl-icon">
                 <svg viewBox="0 0 24 24">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
                 </svg>
               </div>
-              <div class="cl-text"><span class="cl-label">Email</span><span class="cl-value">girishbodempudi@gmail.com</span></div>
+              <div class="cl-text">
+                <span class="cl-label">Email</span>
+                <span class="cl-value">girishbodempudi@gmail.com</span>
+              </div>
               <span class="cl-arrow">↗</span>
             </a>
             <a href="https://www.linkedin.com/in/girishbodempudi/" target="_blank" class="contact-link">
               <div class="cl-icon">
                 <svg viewBox="0 0 24 24">
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                  <rect x="2" y="9" width="4" height="12" />
-                  <circle cx="4" cy="4" r="2" />
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                  <rect x="2" y="9" width="4" height="12"/>
+                  <circle cx="4" cy="4" r="2"/>
                 </svg>
               </div>
-              <div class="cl-text"><span class="cl-label">LinkedIn</span><span class="cl-value">girishbodempudi</span></div>
+              <div class="cl-text">
+                <span class="cl-label">LinkedIn</span>
+                <span class="cl-value">girishbodempudi</span>
+              </div>
               <span class="cl-arrow">↗</span>
             </a>
             <a href="https://github.com/ramgirish10" target="_blank" class="contact-link">
               <div class="cl-icon">
-                <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg>
+                <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
               </div>
-              <div class="cl-text"><span class="cl-label">GitHub</span><span class="cl-value">ramgirish10</span></div>
+              <div class="cl-text">
+                <span class="cl-label">GitHub</span>
+                <span class="cl-value">ramgirish10</span>
+              </div>
               <span class="cl-arrow">↗</span>
             </a>
           </div>
@@ -1292,73 +1546,70 @@
           </div>
         </div>
       </section>
-    </div>
-    <!-- end #snap-container -->
+
+    </div><!-- end #snap-container -->
 
     <script>
       gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-      // ── SECTION ORDER ──
-      const sections = ["hero", "about", "projects", "timeline", "skills", "contact"];
-      let currentIdx = 0;
+      const isMobile = () => window.innerWidth <= 768;
 
-      // ── SNAP CONTAINER REF ──
+      // ── SECTION ORDER ──
+      const sections = ["hero","about","projects","timeline","skills","contact"];
+      let currentIdx = 0;
       const sc = document.getElementById("snap-container");
 
-      // ── CURSOR ──
-      const cursor = document.getElementById("cursor"),
-        ring = document.getElementById("cursorRing");
-      let mx = 0,
-        my = 0,
-        rx = 0,
-        ry = 0;
-      document.addEventListener("mousemove", (e) => {
-        mx = e.clientX;
-        my = e.clientY;
-        cursor.style.left = mx + "px";
-        cursor.style.top = my + "px";
-      });
-      (function animR() {
-        rx += (mx - rx) * 0.12;
-        ry += (my - ry) * 0.12;
-        ring.style.left = rx + "px";
-        ring.style.top = ry + "px";
-        requestAnimationFrame(animR);
-      })();
-      document.querySelectorAll("a,button,.project-card,.skill-pill").forEach((el) => {
-        el.addEventListener("mouseenter", () => ring.classList.add("hover"));
-        el.addEventListener("mouseleave", () => ring.classList.remove("hover"));
-      });
+      // ── CURSOR (desktop only) ──
+      const cursor = document.getElementById("cursor");
+      const ring   = document.getElementById("cursorRing");
+      let mx=0, my=0, rx=0, ry=0;
+      if (!isMobile()) {
+        document.addEventListener("mousemove", e => {
+          mx = e.clientX; my = e.clientY;
+          cursor.style.left = mx + "px";
+          cursor.style.top  = my + "px";
+        });
+        (function animR() {
+          rx += (mx - rx) * 0.12;
+          ry += (my - ry) * 0.12;
+          ring.style.left = rx + "px";
+          ring.style.top  = ry + "px";
+          requestAnimationFrame(animR);
+        })();
+        document.querySelectorAll("a,button,.project-card,.skill-pill").forEach(el => {
+          el.addEventListener("mouseenter", () => ring.classList.add("hover"));
+          el.addEventListener("mouseleave", () => ring.classList.remove("hover"));
+        });
+      }
 
-      // ── NAV ──
-      const nav = document.getElementById("nav");
+      // ── PROGRESS BAR ──
       sc.addEventListener("scroll", () => {
+        const nav = document.getElementById("nav");
         nav.classList.toggle("scrolled", sc.scrollTop > 60);
-        // progress bar
         const pct = sc.scrollTop / (sc.scrollHeight - sc.clientHeight);
         document.getElementById("progressBar").style.transform = `scaleX(${pct})`;
-        // update active dot based on scroll position
+        // update active dot from scroll position
         const idx = Math.round(sc.scrollTop / sc.clientHeight);
         setActiveSection(idx, false);
       });
 
       // ── NAVIGATE TO SECTION ──
-      function goTo(id, animate = true) {
+      function goTo(id) {
         const el = document.getElementById(id);
         if (!el) return;
+        if (isMobile()) {
+          // on mobile snap is off — just scroll element into view
+          el.scrollIntoView({ behavior: "smooth" });
+        } else {
+          sc.scrollTo({ top: el.offsetTop, behavior: "smooth" });
+        }
         const idx = sections.indexOf(id);
-        sc.scrollTo({ top: el.offsetTop, behavior: animate ? "smooth" : "auto" });
         setActiveSection(idx, false);
       }
 
       function setActiveSection(idx, scroll = true) {
-        if (idx === currentIdx && !scroll) {
-          // still update dots + nav
-        }
         currentIdx = Math.max(0, Math.min(sections.length - 1, idx));
-        // dots
         document.querySelectorAll(".dot").forEach((d, i) => d.classList.toggle("active", i === currentIdx));
-        // trigger section animations
         triggerSectionAnim(sections[currentIdx]);
       }
 
@@ -1367,47 +1618,66 @@
         dot.addEventListener("click", () => goTo(sections[i]));
       });
 
-      // ── NAV LINKS + BUTTONS with data-target ──
-      document.querySelectorAll("[data-target]").forEach((el) => {
-        el.addEventListener("click", (e) => {
+      // ── NAV LINKS (data-target) ──
+      document.querySelectorAll("[data-target]").forEach(el => {
+        el.addEventListener("click", e => {
           e.preventDefault();
           goTo(el.dataset.target);
         });
       });
-      document.getElementById("logoHome").addEventListener("click", (e) => {
+      document.getElementById("logoHome").addEventListener("click", e => {
         e.preventDefault();
         goTo("hero");
       });
 
+      // ── HAMBURGER (mobile) ──
+      const hamburger  = document.getElementById("hamburger");
+      const mobileMenu = document.getElementById("mobileMenu");
+      hamburger.addEventListener("click", () => {
+        hamburger.classList.toggle("open");
+        mobileMenu.classList.toggle("open");
+      });
+      // mobile menu links use data-mobile-target so they don't clash
+      document.querySelectorAll("[data-mobile-target]").forEach(el => {
+        el.addEventListener("click", e => {
+          e.preventDefault();
+          hamburger.classList.remove("open");
+          mobileMenu.classList.remove("open");
+          goTo(el.dataset.mobileTarget);
+        });
+      });
+
       // ── CHROME WAVE ANIMATION ──
-      const cv = document.getElementById("chrome"),
-        ctx = cv.getContext("2d");
+      const cv  = document.getElementById("chrome");
+      const ctx = cv.getContext("2d");
       let ct = 0;
       function rsz() {
-        cv.width = cv.offsetWidth;
+        cv.width  = cv.offsetWidth;
         cv.height = cv.offsetHeight;
       }
       rsz();
       window.addEventListener("resize", () => {
         rsz();
-        setResponsiveProjects();
+        if (!isMobile()) setResponsiveProjects();
       });
 
       function drawChrome() {
-        const w = cv.width,
-          h = cv.height;
+        const w = cv.width, h = cv.height;
         ctx.fillStyle = "#f7f7f5";
         ctx.fillRect(0, 0, w, h);
         for (let i = 0; i < 20; i++) {
           const yb = h * (0.08 + i * 0.05) + Math.sin(ct * 0.3 + i * 0.6) * 18;
           ctx.beginPath();
           for (let x = 0; x <= w; x += 2) {
-            const y = yb + Math.sin((x / w) * Math.PI * 3.8 + ct + i * 0.45) * 24 + Math.sin((x / w) * Math.PI * 1.6 + ct * 1.15 + i) * 11 + Math.sin((x / w) * Math.PI * 6.5 + ct * 0.55) * 5;
+            const y = yb
+              + Math.sin((x/w) * Math.PI * 3.8 + ct + i * 0.45) * 24
+              + Math.sin((x/w) * Math.PI * 1.6 + ct * 1.15 + i) * 11
+              + Math.sin((x/w) * Math.PI * 6.5 + ct * 0.55) * 5;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
           const hue = (172 + i * 16 + ct * 11) % 360;
-          ctx.strokeStyle = `hsla(${hue},${42 + Math.sin(ct + i) * 10}%,${60 + Math.sin(ct * 0.45 + i) * 8}%,${i === 7 || i === 14 ? 0.38 : 0.18})`;
-          ctx.lineWidth = i === 7 || i === 14 ? 2.5 : 1;
+          ctx.strokeStyle = `hsla(${hue},${42 + Math.sin(ct+i)*10}%,${60 + Math.sin(ct*0.45+i)*8}%,${i===7||i===14?0.38:0.18})`;
+          ctx.lineWidth = i===7||i===14 ? 2.5 : 1;
           ctx.stroke();
         }
         ct += 0.009;
@@ -1415,101 +1685,81 @@
       }
       drawChrome();
 
-      // ── HERO ANIMATIONS (run once on load) ──
-      gsap.to(".hero-eyebrow", { opacity: 1, duration: 0.8, delay: 0.2, ease: "power3.out" });
-      gsap.to(".hero-name .word span", { y: 0, duration: 1.1, ease: "power4.out", stagger: 0.15, delay: 0.3 });
-      gsap.to(".hero-bottom", { opacity: 1, duration: 0.8, delay: 0.95, ease: "power3.out" });
-      gsap.to(".hero-stats", { opacity: 1, duration: 0.8, delay: 1.15, ease: "power3.out" });
+      // ── HERO ANIMATIONS ──
+      // Always run — on mobile the CSS !important makes content visible
+      // immediately, so even if GSAP is slow there's no blank screen.
+      gsap.to(".hero-eyebrow",       { opacity: 1, duration: 0.8, delay: 0.2,  ease: "power3.out" });
+      gsap.to(".hero-name .word span",{ y: 0,       duration: 1.1, delay: 0.3,  ease: "power4.out", stagger: 0.15 });
+      gsap.to(".hero-bottom",         { opacity: 1, duration: 0.8, delay: 0.95, ease: "power3.out" });
+      gsap.to(".hero-stats",          { opacity: 1, duration: 0.8, delay: 1.15, ease: "power3.out" });
 
       // Counters
-      document.querySelectorAll("[data-count]").forEach((el) => {
+      document.querySelectorAll("[data-count]").forEach(el => {
         const t = +el.dataset.count;
-        gsap.fromTo(
-          el,
+        gsap.fromTo(el,
           { textContent: 0 },
           {
-            textContent: t,
-            duration: 2,
-            delay: 1.4,
-            ease: "power2.out",
+            textContent: t, duration: 2, delay: 1.4, ease: "power2.out",
             snap: { textContent: 1 },
-            onUpdate() {
-              el.textContent = Math.round(+el.textContent);
-            },
-            onComplete() {
-              el.textContent = t + "+";
-            },
-          },
+            onUpdate() { el.textContent = Math.round(+el.textContent); },
+            onComplete() { el.textContent = t + "+"; }
+          }
         );
       });
 
-      // ── SECTION ENTER ANIMATIONS (triggered on nav) ──
+      // ── SECTION ENTER ANIMATIONS ──
       const animated = new Set(["hero"]);
-
       function triggerSectionAnim(id) {
         if (animated.has(id)) return;
         animated.add(id);
-
         if (id === "about") {
-          gsap.from("#about .about-text p", { opacity: 0, y: 20, duration: 0.65, stagger: 0.1, ease: "power3.out", delay: 0.1 });
-          gsap.from("#about .about-img-wrap", { opacity: 0, x: 40, duration: 0.9, ease: "power3.out", delay: 0.2 });
+          gsap.from("#about .about-text p",   { opacity: 0, y: 20, duration: 0.65, stagger: 0.1,  ease: "power3.out", delay: 0.1 });
+          gsap.from("#about .about-img-wrap", { opacity: 0, x: 40, duration: 0.9,               ease: "power3.out", delay: 0.2 });
         }
         if (id === "projects") {
           gsap.from("#projects .project-card:not(.hidden)", { opacity: 0, y: 28, duration: 0.55, stagger: 0.06, ease: "power3.out", delay: 0.1 });
         }
         if (id === "timeline") {
-          gsap.to(".timeline-item", { opacity: 1, x: 0, duration: 0.55, stagger: 0.08, ease: "power3.out", delay: 0.1 });
-          gsap.from(".timeline-aside", { opacity: 0, x: 40, duration: 0.9, ease: "power3.out", delay: 0.2 });
-        }
-        if (id === "skills") {
-          // skills visible by default, no animation needed
+          gsap.to(".timeline-item",   { opacity: 1, x: 0, duration: 0.55, stagger: 0.08, ease: "power3.out", delay: 0.1 });
+          gsap.from(".timeline-aside",{ opacity: 0, x: 40, duration: 0.9,               ease: "power3.out", delay: 0.2 });
         }
         if (id === "contact") {
-          gsap.from(".contact-big", { opacity: 0, x: -30, duration: 0.8, ease: "power3.out", delay: 0.1 });
-          gsap.to(".contact-link", { opacity: 1, x: 0, duration: 0.55, stagger: 0.1, ease: "power3.out", delay: 0.2 });
+          gsap.from(".contact-big",  { opacity: 0, x: -30, duration: 0.8,               ease: "power3.out", delay: 0.1 });
+          gsap.to(".contact-link",   { opacity: 1, x: 0,   duration: 0.55, stagger: 0.1, ease: "power3.out", delay: 0.2 });
         }
       }
 
-      // ── RESPONSIVE PROJECTS ──
+      // ── RESPONSIVE PROJECTS (desktop/laptop only) ──
       function setResponsiveProjects() {
+        if (isMobile()) return; // mobile layout handled by CSS only
         const cards = document.querySelectorAll(".project-card");
-        const grid = document.getElementById("projectsGrid");
-        const vh = window.innerHeight;
-
-        // Decide how many cards to show
-        // Available height = vh minus section header (~140px) minus footer (~72px)
-        const available = vh - 140 - 72;
-        // Each row is roughly available/2 (two rows max)
-        // Large screens (vh > 800): show 6 (2×3)
-        // Smaller (vh <= 800): show 4 (2×2)
+        const grid  = document.getElementById("projectsGrid");
+        const vh    = window.innerHeight;
         let show, cols, rows;
-        if (vh > 800) {
-          show = 6;
-          cols = 3;
-          rows = 2;
-        } else {
-          show = 4;
-          cols = 2;
-          rows = 2;
-        }
-
+        if (vh > 800) { show = 6; cols = 3; rows = 2; }
+        else          { show = 4; cols = 2; rows = 2; }
         grid.style.gridTemplateColumns = `repeat(${cols},1fr)`;
-        grid.style.gridTemplateRows = `repeat(${rows},1fr)`;
-
-        cards.forEach((c, i) => {
-          c.classList.toggle("hidden", i >= show);
-        });
+        grid.style.gridTemplateRows    = `repeat(${rows},1fr)`;
+        cards.forEach((c, i) => c.classList.toggle("hidden", i >= show));
       }
       setResponsiveProjects();
 
-      // Reset timeline item initial state for animation
-      document.querySelectorAll(".timeline-item").forEach((el) => {
-        gsap.set(el, { opacity: 0, x: -20 });
-      });
-      // skill groups visible by default
-      document.querySelectorAll(".contact-link").forEach((el) => {
-        gsap.set(el, { opacity: 0, x: 24 });
-      });
+      // ── TIMELINE initial state (for GSAP animation) ──
+      // Only set on desktop — on mobile CSS forces opacity:1
+      if (!isMobile()) {
+        document.querySelectorAll(".timeline-item").forEach(el => {
+          gsap.set(el, { opacity: 0, x: -20 });
+        });
+      }
+
+      // ── CONTACT LINKS initial state ──
+      // Only set on desktop — on mobile CSS forces opacity:1
+      if (!isMobile()) {
+        document.querySelectorAll(".contact-link").forEach(el => {
+          gsap.set(el, { opacity: 0, x: 24 });
+        });
+      }
+
     </script>
   </body>
 </html>
